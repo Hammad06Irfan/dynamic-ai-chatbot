@@ -2,7 +2,7 @@
 
 A elegant, responsive, and highly customisable conversational AI application built with **Python**, **Streamlit**, and the **Groq API**. This chatbot features dynamic persona switching, session-state persistent conversation memory, a clean user interface, and lightning-fast execution utilizing open-source LLMs hosted on Groq Cloud.
 
-![Application Demo](./Demo_pic.jpg)
+![Application Demo](./Demo_pic.png)
 
 ## 🌟 Features
 
