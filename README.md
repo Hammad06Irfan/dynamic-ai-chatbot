@@ -7,7 +7,7 @@
 [![ChromaDB](https://img.shields.io/badge/Vector_Store-ChromaDB-green.svg)](https://www.trychroma.com/)
 [![Instructor](https://img.shields.io/badge/Schema-Instructor_%2B_Pydantic-orange.svg)](https://github.com/jxnl/instructor)
 
-A high-speed, local-first technical AI agent designed for engineering workflows, hardware design calculations, datasheet analysis, and live documentation retrieval. Built using **Streamlit**, **Groq Cloud**, **Model Context Protocol (MCP)**, **ChromaDB**, and **Instructor**.
+A high-speed, customizable, local-first technical AI agent designed for engineering workflows, hardware design calculations, datasheet analysis, and live documentation retrieval. Built using **Streamlit**, **Groq Cloud**, **Model Context Protocol (MCP)**, **ChromaDB**, and **Instructor**.
 
 ---
 
