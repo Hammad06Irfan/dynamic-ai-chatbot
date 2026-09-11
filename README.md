@@ -7,7 +7,7 @@
 [![ChromaDB](https://img.shields.io/badge/Vector_Store-ChromaDB-green.svg)](https://www.trychroma.com/)
 [![Instructor](https://img.shields.io/badge/Schema-Instructor_%2B_Pydantic-orange.svg)](https://github.com/jxnl/instructor)
 
-A high-speed, local-first technical AI agent designed for engineering workflows, hardware design calculations, datasheet analysis, and live documentation retrieval[cite: 1]. Built using **Streamlit**, **Groq Cloud**, **Model Context Protocol (MCP)**, **ChromaDB**, and **Instructor**[cite: 1].
+A high-speed, local-first technical AI agent designed for engineering workflows, hardware design calculations, datasheet analysis, and live documentation retrieval. Built using **Streamlit**, **Groq Cloud**, **Model Context Protocol (MCP)**, **ChromaDB**, and **Instructor**.
 
 ---
 
@@ -20,37 +20,37 @@ A high-speed, local-first technical AI agent designed for engineering workflows,
 ## Core Highlights & Key Features
 
 ### 1. Model Context Protocol (MCP) Integration
-* **Decoupled Architecture:** Runs an isolated FastMCP server over standard input/output (`stdio`) to expose specialized tools to the reasoning engine[cite: 1].
-* **AST Safe Math Evaluation:** Evaluates algebraic and arithmetic formulas via Python's Abstract Syntax Tree (`ast`) without relying on hazardous `eval()` calls[cite: 1].
-* **Datasheet & Doc Querying:** Directly queries offline vector databases for component ratings, pinouts, and thermal tolerances[cite: 1].
-* **DuckDuckGo Web Search:** Fetches real-time web documentation, errata, and pinout diagrams on demand[cite: 1].
+* **Decoupled Architecture:** Runs an isolated FastMCP server over standard input/output (`stdio`) to expose specialized tools to the reasoning engine.
+* **AST Safe Math Evaluation:** Evaluates algebraic and arithmetic formulas via Python's Abstract Syntax Tree (`ast`) without relying on hazardous `eval()` calls.
+* **Datasheet & Doc Querying:** Directly queries offline vector databases for component ratings, pinouts, and thermal tolerances.
+* **DuckDuckGo Web Search:** Fetches real-time web documentation, errata, and pinout diagrams on demand.
 
 ### 2. Embedded Vector RAG (ChromaDB)
-* **Local Persistence:** Retains document chunks locally under `./chroma_data` using ChromaDB and cosine distance matching[cite: 1].
-* **Offline Embeddings:** Employs the lightweight `all-MiniLM-L6-v2` SentenceTransformer model to perform embeddings completely on-device without incurring extra cloud API costs[cite: 1].
+* **Local Persistence:** Retains document chunks locally under `./chroma_data` using ChromaDB and cosine distance matching.
+* **Offline Embeddings:** Employs the lightweight `all-MiniLM-L6-v2` SentenceTransformer model to perform embeddings completely on-device without incurring extra cloud API costs.
 
 ### 3. Dual-Layer Security Guardrails
-* **Pre-Inference Input Guardrail:** Inspects incoming prompts via regex patterns to intercept jailbreaks, system prompt extractions, and credential theft before reaching the LLM[cite: 1].
-* **Post-Inference Output Redaction:** Uses Pydantic field validators to sanitize responses, automatically masking emails (`[REDACTED_EMAIL]`), phone numbers (`[REDACTED_PHONE]`), and preventing accidental leaks of Groq API keys (`gsk_*`)[cite: 1].
+* **Pre-Inference Input Guardrail:** Inspects incoming prompts via regex patterns to intercept jailbreaks, system prompt extractions, and credential theft before reaching the LLM.
+* **Post-Inference Output Redaction:** Uses Pydantic field validators to sanitize responses, automatically masking emails (`[REDACTED_EMAIL]`), phone numbers (`[REDACTED_PHONE]`), and preventing accidental leaks of Groq API keys (`gsk_*`).
 
 ### 4. Deterministic Schema Enforcement & Telemetry
-* **Instructor + Pydantic:** Guarantees strict JSON schemas containing the final response text, intent classification, confidence scores, and extracted topic tags[cite: 1].
-* **Streamlit Telemetry Drawer:** Displays live intent detection, topic categorization, and confidence metrics directly underneath each response bubble in the web interface[cite: 1].
+* **Instructor + Pydantic:** Guarantees strict JSON schemas containing the final response text, intent classification, confidence scores, and extracted topic tags.
+* **Streamlit Telemetry Drawer:** Displays live intent detection, topic categorization, and confidence metrics directly underneath each response bubble in the web interface.
 
 ### 5. Dynamic Persona Management
-* **Sidebar Controls:** Update the system prompt on the fly to instantly switch behavior from a detailed hardware engineer to an embedded systems tutor[cite: 1].
-* **State Persistence:** Preserves conversational memory across Streamlit re-renders using a centralized `ConversationManager`[cite: 1].
+* **Sidebar Controls:** Update the system prompt on the fly to instantly switch behavior from a detailed hardware engineer to an embedded systems tutor.
+* **State Persistence:** Preserves conversational memory across Streamlit re-renders using a centralized `ConversationManager`.
 
 ---
 
 ## Technologies & Stack
 
-* **Frontend UI:** Streamlit[cite: 1]
-* **Inference Platform:** Groq Cloud (`openai/gpt-oss-20b` / `llama-3.3-70b-versatile`)[cite: 1]
-* **Tool Interoperability:** Model Context Protocol (`mcp`) via `stdio`[cite: 1]
-* **Structured Output:** Instructor & Pydantic[cite: 1]
-* **Vector Store & Embeddings:** ChromaDB & Sentence-Transformers (`all-MiniLM-L6-v2`)[cite: 1]
-* **Live Web Retrieval:** DuckDuckGo Search (`ddgs`)[cite: 1]
+* **Frontend UI:** Streamlit
+* **Inference Platform:** Groq Cloud (`openai/gpt-oss-20b` / `llama-3.3-70b-versatile`)
+* **Tool Interoperability:** Model Context Protocol (`mcp`) via `stdio`
+* **Structured Output:** Instructor & Pydantic
+* **Vector Store & Embeddings:** ChromaDB & Sentence-Transformers (`all-MiniLM-L6-v2`)
+* **Live Web Retrieval:** DuckDuckGo Search (`ddgs`)
 
 ---
 
@@ -121,8 +121,8 @@ A high-speed, local-first technical AI agent designed for engineering workflows,
 ## Getting Started
 
 ### 1. Prerequisites
-* **Python 3.10+**[cite: 1]
-* A **Groq API Key** (Obtain from the [Groq Console](https://console.groq.com/))[cite: 1]
+* **Python 3.10+**
+* A **Groq API Key** (Obtain from the [Groq Console](https://console.groq.com/))
 
 ### 2. Clone and Prepare Environment
 ```bash
@@ -142,7 +142,7 @@ pip install -r requirements.txt
 ```
 
 ### 3. Configure API Key
-Export your Groq API key to your environment variables[cite: 1]:
+Export your Groq API key to your environment variables:
 
 *On macOS / Linux:*
 ```bash
@@ -155,32 +155,32 @@ setx GROQ_API_KEY "gsk_your_actual_api_key_here"
 ```
 
 ### 4. Seed the Vector Store
-Populate the local ChromaDB database with default hardware datasheets and pinout documentation[cite: 1]:
+Populate the local ChromaDB database with default hardware datasheets and pinout documentation:
 ```bash
 python seed_rag.py
 ```
 
 ### 5. Run the Application
-Launch the Streamlit interface[cite: 1]:
+Launch the Streamlit interface:
 ```bash
 streamlit run app.py
 ```
-Open `http://localhost:8501` in your browser to start using the assistant[cite: 1].
+Open `http://localhost:8501` in your browser to start using the assistant.
 
 ---
 
 ## Verification & Testing
 
-Verify that your schema validation and security guardrails function as intended[cite: 1]:
+Verify that your schema validation and security guardrails function as intended:
 
 * **Test Guardrails (Input Injections & Output Redaction):**
   ```bash
   python test_guardrails.py
   ```
-  Expected output confirms blocked injection attempts and masked email/phone patterns[cite: 1].
+  Expected output confirms blocked injection attempts and masked email/phone patterns.
 
 * **Test Pydantic Schema Extraction:**
   ```bash
   python test_validation.py
   ```
-  Expected output displays parsed intent categories, confidence scores, and extracted topic keywords[cite: 1].
+  Expected output displays parsed intent categories, confidence scores, and extracted topic keywords.
