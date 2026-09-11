@@ -1,89 +1,186 @@
-# 🤖 Dynamic AI Chatbot
+# Dynamic AI Chatbot for Engineering Assistance
 
-A elegant, responsive, and highly customisable conversational AI application built with **Python**, **Streamlit**, and the **Groq API**. This chatbot features dynamic persona switching, session-state persistent conversation memory, a clean user interface, and lightning-fast execution utilizing open-source LLMs hosted on Groq Cloud.
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.35+-FF4B4B.svg)](https://streamlit.io/)
+[![Groq Cloud](https://img.shields.io/badge/Inference-Groq_LPU-F05A24.svg)](https://groq.com/)
+[![MCP](https://img.shields.io/badge/Protocol-MCP-8A2BE2.svg)](https://modelcontextprotocol.io/)
+[![ChromaDB](https://img.shields.io/badge/Vector_Store-ChromaDB-green.svg)](https://www.trychroma.com/)
+[![Instructor](https://img.shields.io/badge/Schema-Instructor_%2B_Pydantic-orange.svg)](https://github.com/jxnl/instructor)
 
-![Application Demo](./Demo_pic.png)
-
-## 🌟 Features
-
-* **Dynamic Persona Configuration:** Alter the chatbot's system instructions, behavior, and tone on-the-fly directly from the sidebar. The underlying engine automatically re-configures the LLM's architecture and updates the memory stream seamlessly.
-* **Persistent Conversation Memory:** Utilizes a custom-built `ConversationManager` class paired with Streamlit's structural `session_state` API to maintain context across multi-turn dialogues without losing historical message data during page re-renders.
-* **High-Speed Cloud Processing:** Powered by the Groq LPU (Language Processing Unit) inference platform executing advanced open-source models (such as `llama-3.3-70b-versatile`) with ultra-low latency.
-* **Modern UI/UX:** Built natively on Streamlit with a clean dark-mode interface, featuring distinct user/assistant messaging bubbles, operational statuses (spinners/loaders), and structural layout frameworks.
-* **State Reset Mechanism:** Single-click global clear to wipe the chat memory slate clean while safely retaining or re-initializing the core user-defined system parameters.
+A high-speed, local-first technical AI agent designed for engineering workflows, hardware design calculations, datasheet analysis, and live documentation retrieval[cite: 1]. Built using **Streamlit**, **Groq Cloud**, **Model Context Protocol (MCP)**, **ChromaDB**, and **Instructor**[cite: 1].
 
 ---
 
-## 🛠️ System Architecture & Mechanics
+## Visual Interface
 
-Unlike standard stateless RESTful API calls that process inputs in absolute isolation, this application constructs an intentional, contextual loop by caching all inputs and outputs sequentially. 
-
-Every conversational interaction follows a structured pipeline:
-1.  **State Initialization:** On application load, a dedicated `ConversationManager` is instantiated inside the active browser's context (`st.session_state`).
-2.  **Payload Injection:** When a user enters text, the manager transforms the raw string into a structured JSON dictionary format specifying the structural role (`"user"`) and data payload (`"content"`).
-3.  **Context Compilation:** The manager assembles the total sequential log—including the hidden primary behavioral directive (`"role": "system"`)—and exposes it as an array to the client wrapper.
-4.  **Remote Evaluation:** The OpenAI-compatible client transmits the complete context stream across a secure TLS tunnel to Groq's edge routing systems for inference processing.
-5.  **Synchronization & Rendering:** The output string is parsed out from the resulting JSON response object, immediately passed to the local text streaming engine to update the UI layout, and appended to the history list as an `"assistant"` message to complete the loop.
+![AI Engineering Assistant Interface](./Demo_pic.png)
 
 ---
 
-## 🚀 Getting Started
+## Core Highlights & Key Features
 
-Follow these instructions to set up the environment and run the application locally.
+### 1. Model Context Protocol (MCP) Integration
+* **Decoupled Architecture:** Runs an isolated FastMCP server over standard input/output (`stdio`) to expose specialized tools to the reasoning engine[cite: 1].
+* **AST Safe Math Evaluation:** Evaluates algebraic and arithmetic formulas via Python's Abstract Syntax Tree (`ast`) without relying on hazardous `eval()` calls[cite: 1].
+* **Datasheet & Doc Querying:** Directly queries offline vector databases for component ratings, pinouts, and thermal tolerances[cite: 1].
+* **DuckDuckGo Web Search:** Fetches real-time web documentation, errata, and pinout diagrams on demand[cite: 1].
 
-### 📋 Prerequisites
+### 2. Embedded Vector RAG (ChromaDB)
+* **Local Persistence:** Retains document chunks locally under `./chroma_data` using ChromaDB and cosine distance matching[cite: 1].
+* **Offline Embeddings:** Employs the lightweight `all-MiniLM-L6-v2` SentenceTransformer model to perform embeddings completely on-device without incurring extra cloud API costs[cite: 1].
 
-* **Python 3.8+** installed on your system.
-* A **Groq API Key** (Obtain a free developer key from the [Groq Console](https://console.groq.com/)).
+### 3. Dual-Layer Security Guardrails
+* **Pre-Inference Input Guardrail:** Inspects incoming prompts via regex patterns to intercept jailbreaks, system prompt extractions, and credential theft before reaching the LLM[cite: 1].
+* **Post-Inference Output Redaction:** Uses Pydantic field validators to sanitize responses, automatically masking emails (`[REDACTED_EMAIL]`), phone numbers (`[REDACTED_PHONE]`), and preventing accidental leaks of Groq API keys (`gsk_*`)[cite: 1].
 
-### 🔧 Installation & Local Setup
+### 4. Deterministic Schema Enforcement & Telemetry
+* **Instructor + Pydantic:** Guarantees strict JSON schemas containing the final response text, intent classification, confidence scores, and extracted topic tags[cite: 1].
+* **Streamlit Telemetry Drawer:** Displays live intent detection, topic categorization, and confidence metrics directly underneath each response bubble in the web interface[cite: 1].
 
-1.  **Clone the Repository:**
-    ```bash
-    git clone [https://github.com/YOUR_USERNAME/dynamic-ai-chatbot.git](https://github.com/YOUR_USERNAME/dynamic-ai-chatbot.git)
-    cd dynamic-ai-chatbot
-    ```
+### 5. Dynamic Persona Management
+* **Sidebar Controls:** Update the system prompt on the fly to instantly switch behavior from a detailed hardware engineer to an embedded systems tutor[cite: 1].
+* **State Persistence:** Preserves conversational memory across Streamlit re-renders using a centralized `ConversationManager`[cite: 1].
 
-2.  **Prepare the Image Asset:**
-    Ensure your dashboard screenshot is saved as `Demo_pic.jpg` inside the root folder of this project directory so the README renders the visual interface properly.
+---
 
-3.  **Install Required Modules:**
-    Install the core framework dependencies using the explicit Python module launcher:
-    
-    *On Windows:*
-    ```cmd
-    python -m pip install streamlit openai
-    ```
-    *On Mac / Linux:*
-    ```bash
-    python3 -m pip install streamlit openai
-    ```
+## Technologies & Stack
 
-4.  **Configure Environment Variables (Best Practice):**
-    To safeguard your personal credentials from accidental exposure, set up your Groq key as an environment variable rather than hardcoding it into the scripts.
-    
-    *Windows (Command Prompt):*
-    ```cmd
-    setx GROQ_API_KEY "gsk_your_actual_api_key_here"
-    ```
-    *(Note: Restart VS Code after running this to apply the system environment update).*
-    
-    *Mac / Linux:*
-    ```bash
-    export GROQ_API_KEY="gsk_your_actual_api_key_here"
-    ```
+* **Frontend UI:** Streamlit[cite: 1]
+* **Inference Platform:** Groq Cloud (`openai/gpt-oss-20b` / `llama-3.3-70b-versatile`)[cite: 1]
+* **Tool Interoperability:** Model Context Protocol (`mcp`) via `stdio`[cite: 1]
+* **Structured Output:** Instructor & Pydantic[cite: 1]
+* **Vector Store & Embeddings:** ChromaDB & Sentence-Transformers (`all-MiniLM-L6-v2`)[cite: 1]
+* **Live Web Retrieval:** DuckDuckGo Search (`ddgs`)[cite: 1]
 
-### 🖥️ Running the Application
+---
 
-Launch the local development server by executing Streamlit directly against your primary web entrypoint file:
+## System Architecture & Workflow
 
+```
+                           +-------------------------------+
+                           |    Streamlit Web Interface    |
+                           +---------------+---------------+
+                                           |
+                                   (Prompt Submitted)
+                                           v
+                           +-------------------------------+
+                           |      Input Guardrail Trap     |  ---> [Blocks Injection / Jailbreak]
+                           |       (guardrails.py)         |
+                           +---------------+---------------+
+                                           | (Validated String)
+                                           v
+                           +-------------------------------+
+                           |      ConversationManager      |
+                           +---------------+---------------+
+                                           |
+          +--------------------------------+--------------------------------+
+          |                                                                 |
+   (Phase 1: Tool Call)                                            (Phase 2: Final Synthesis)
+          v                                                                 v
++--------------------+                                            +--------------------+
+|  MCP Client Bridge |                                            |  Instructor Client |
+|   (mcp_client.py)  |                                            |    (Groq Cloud)    |
++---------+----------+                                            +---------+----------+
+          | (stdio)                                                                 |
+          v                                                                         v
++--------------------+                                            +--------------------+
+|     MCP Server     |                                            |   ChatbotResponse  |
+|   (mcp_server.py)  |                                            |  (schemas.py PII   |
++---------+----------+                                            |   Output Filter)   |
+          |                                                               +---------+----------+
+          +--> [evaluate_math_expression] (AST Math)                                |
+          +--> [query_knowledge_base] (ChromaDB Vector RAG)                         v
+          +--> [web_search] (DuckDuckGo Live Web Search)                  +--------------------+
+                                                                          | Streamlit Response |
+                                                                          |    + Telemetry     |
+                                                                          +--------------------+
+```
+
+---
+
+## Project Structure
+
+```plaintext
+.
+├── app.py                  # Streamlit web interface with telemetry badges & sidebar controls
+├── ConversationManager.py  # Central orchestrator: handles tool discovery, execution & schema synthesis
+├── mcp_client.py           # Async stdio bridge connecting conversation loops to MCP servers
+├── mcp_server.py           # Tool server providing AST math, vector queries, and web searches
+├── rag_pipeline.py         # ChromaDB client management, cosine vector lookups, and embedding pipeline
+├── schemas.py              # Pydantic schema validation, confidence tracking, and PII output guardrails
+├── guardrails.py           # Pre-inference prompt injection and secret theft filters
+├── seed_rag.py             # Script to pre-populate local ChromaDB vector store with engineering docs
+├── test_guardrails.py      # Unit test script validating input/output security guardrails
+├── test_validation.py      # Verification script ensuring Instructor schema outputs
+├── requirements.txt        # Full project dependencies
+└── Demo_pic.png            # Interface demo image asset
+```
+
+---
+
+## Getting Started
+
+### 1. Prerequisites
+* **Python 3.10+**[cite: 1]
+* A **Groq API Key** (Obtain from the [Groq Console](https://console.groq.com/))[cite: 1]
+
+### 2. Clone and Prepare Environment
 ```bash
-python -m streamlit run app.py
-Streamlit will spin up a local network socket (typically at http://localhost:8501) and automatically launch a new tab inside your default internet browser displaying the operational application.
+git clone [https://github.com/Hammad06Irfan/dynamic-ai-chatbot.git](https://github.com/Hammad06Irfan/dynamic-ai-chatbot.git)
+cd dynamic-ai-chatbot
+```
 
-📂 Project Structure
-Plaintext
-├── app.py                  # Primary entrypoint file containing Streamlit UI layouts
-├── conversation_manager.py # Logic for memory buffers and object formatting
-├── .gitignore              # Safeguards internal project caches and .env configs
-└── Demo_pic.jpg            # Application interface screenshot asset
+Create and activate a virtual environment:
+```bash
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+```
+
+Install the required dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Configure API Key
+Export your Groq API key to your environment variables[cite: 1]:
+
+*On macOS / Linux:*
+```bash
+export GROQ_API_KEY="gsk_your_actual_api_key_here"
+```
+
+*On Windows (Command Prompt):*
+```cmd
+setx GROQ_API_KEY "gsk_your_actual_api_key_here"
+```
+
+### 4. Seed the Vector Store
+Populate the local ChromaDB database with default hardware datasheets and pinout documentation[cite: 1]:
+```bash
+python seed_rag.py
+```
+
+### 5. Run the Application
+Launch the Streamlit interface[cite: 1]:
+```bash
+streamlit run app.py
+```
+Open `http://localhost:8501` in your browser to start using the assistant[cite: 1].
+
+---
+
+## Verification & Testing
+
+Verify that your schema validation and security guardrails function as intended[cite: 1]:
+
+* **Test Guardrails (Input Injections & Output Redaction):**
+  ```bash
+  python test_guardrails.py
+  ```
+  Expected output confirms blocked injection attempts and masked email/phone patterns[cite: 1].
+
+* **Test Pydantic Schema Extraction:**
+  ```bash
+  python test_validation.py
+  ```
+  Expected output displays parsed intent categories, confidence scores, and extracted topic keywords[cite: 1].
