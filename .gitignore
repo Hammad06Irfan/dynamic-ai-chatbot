@@ -1,4 +1,28 @@
+# Virtual Environment
 .venv/
+venv/
+ENV/
+
+# Python Cache & Bytecode
 __pycache__/
-.streamlit/
-*.env
+*.py[cod]
+*$py.class
+
+# Vector DB & Local Storage
+chroma_data/
+
+# Environment Variables & Secrets
+.env
+.env.*
+
+# OS Metadata
+.DS_Store
+Thumbs.db
+
+# IDE & Editor Settings
+.vscode/
+.idea/
+
+# Scratch & Deprecated Files
+test_tools.py
+tools.py

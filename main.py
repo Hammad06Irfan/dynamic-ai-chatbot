@@ -6,7 +6,7 @@ from ConversationManager import ConversationManager
 
 # 1. Initialize the OpenAI client (It automatically looks for an OPENAI_API_KEY environment variable)
 client = OpenAI(
-    api_key="APIKEY",           # Your gsk_ key
+    api_key="Insert_your_API_key",           # Your gsk_ key
     base_url="https://api.groq.com/openai/v1"  # Tells the library to route to Groq
 )
 
@@ -15,7 +15,7 @@ def main():
     chatbot_brain = ConversationManager(system_prompt="You are a sarcastic but helpful assistant.")
     
     print("AI Chatbot Initialized! Type 'quit' or 'exit' to stop.")
-    print("--------------------------------------------------")
+    print("------------------------------------------------------")
 
     while True:
         # 3. Take user input
