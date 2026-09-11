@@ -13,7 +13,7 @@ A high-speed, customizable, local-first technical AI agent designed for engineer
 
 ## Visual Interface
 
-![AI Engineering Assistant Interface](./Demo_pic.png)
+![AI Engineering Assistant Interface](./demo_pic.png)
 
 ---
 
