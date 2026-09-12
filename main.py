@@ -1,51 +1,50 @@
 import os
-from openai import OpenAI
+import sys
 from ConversationManager import ConversationManager
-# Assuming your ConversationManager class is in the same file or imported
-# from conversation_manager import ConversationManager
 
-# 1. Initialize the OpenAI client (It automatically looks for an OPENAI_API_KEY environment variable)
-client = OpenAI(
-    api_key="Insert_your_API_key",           # Your gsk_ key
-    base_url="https://api.groq.com/openai/v1"  # Tells the library to route to Groq
-)
+# 1. Put your key here (or export it in terminal via export GROQ_API_KEY="...")
+MY_API_KEY = "Insert_your_API_key"
 
 def main():
-    # 2. Instantiate your conversation manager
-    chatbot_brain = ConversationManager(system_prompt="You are a sarcastic but helpful assistant.")
+    # Fallback to environment variable if MY_API_KEY is left as placeholder
+    api_key = os.getenv("GROQ_API_KEY", MY_API_KEY)
+
+    # 2. Pass api_key directly into ConversationManager
+    chatbot_brain = ConversationManager(
+        api_key=api_key,
+        system_prompt="You are a sarcastic but helpful engineering assistant."
+    )
     
     print("AI Chatbot Initialized! Type 'quit' or 'exit' to stop.")
     print("------------------------------------------------------")
 
     while True:
-        # 3. Take user input
-        user_input = input("\nYou: ")
-        
-        # Check if the user wants to break out of the loop
-        if user_input.lower() in ["quit", "exit"]:
-            print("AI: Goodbye!")
-            break
-            
-        if not user_input.strip():
-            continue
-
-        # 4. Save the user's message to our manager's history
-        chatbot_brain.add_user_message(user_input)
-
         try:
-            # 5. Send the entire conversation history to OpenAI
-            response = client.chat.completions.create(
-                model="llama-3.3-70b-versatile", # A fast, cheap, and smart model perfect for projects
-                messages=chatbot_brain.get_history() # Passing the full array of history!
-            )
+            user_input = input("\nYou: ").strip()
+            
+            if user_input.lower() in ["quit", "exit"]:
+                print("AI: Goodbye!")
+                break
+                
+            if not user_input:
+                continue
 
-            # 6. Extract the AI's text response
-            ai_response = response.choices[0].message.content
-            print(f"\nAI: {ai_response}")
+            # 3. Add user message (triggers input guardrails)
+            chatbot_brain.add_user_message(user_input)
 
-            # 7. CRITICAL: Save the AI's response to history so it remembers it next turn!
-            chatbot_brain.add_ai_message(ai_response)
+            # 4. Generate response (runs MCP tools, RAG, and Pydantic validation)
+            response = chatbot_brain.generate_response()
 
+            # 5. Save response to conversation history
+            chatbot_brain.add_ai_message(response)
+
+            # 6. Display output & metadata
+            print(f"\nAI: {response.response_text}")
+            print(f"  [Intent: {response.detected_intent} | Confidence: {response.confidence_score * 100:.1f}%]")
+
+        except (KeyboardInterrupt, EOFError):
+            print("\nSession ended.")
+            break
         except Exception as e:
             print(f"\nAn error occurred: {e}")
 
